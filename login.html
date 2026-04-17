@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 via-white to-indigo-100">
+
+<section class="pt-28 pb-20 flex items-center justify-center">
+
+<div class="w-full max-w-md px-6 text-center">
+
+<h1 class="text-4xl font-extrabold text-gray-900">Welcome Back 👋</h1>
+
+<div class="bg-white shadow-2xl rounded-2xl p-8 mt-10 border border-blue-100">
+
+<form id="loginForm">
+
+<!-- Email -->
+<label class="block text-left font-semibold mb-1 text-gray-700">
+Email Address
+</label>
+
+<div class="relative mb-5">
+
+<input 
+type="email"
+name="email"
+required
+class="w-full border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg px-4 py-3 pr-10 outline-none"
+placeholder="you@example.com">
+
+<i class="fa-regular fa-envelope absolute right-3 top-3.5 text-gray-400"></i>
+<p id="emailError" class="text-red-500 text-sm mt-1"></p>
+</div>
+
+
+<!-- Password -->
+<label class="block text-left font-semibold mb-1 text-gray-700">
+Password
+</label>
+
+<div class="relative mb-3">
+
+<input
+id="password"
+type="password"
+name="password"
+required
+class="w-full border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg px-4 py-3 pr-12 outline-none"
+placeholder="Enter your password">
+
+<button
+type="button"
+onclick="togglePassword()"
+class="absolute right-3 top-3.5 text-gray-400 hover:text-blue-600">
+
+<i id="eyeIcon" class="fa-regular fa-eye"></i>
+
+</button>
+
+</div>
+<p id="passwordError" class="text-red-500 text-sm mt-1"></p>
+
+<div class="flex justify-between items-center text-sm mt-2 mb-6">
+
+<label class="flex items-center gap-2 text-gray-600">
+<input type="checkbox" id="rememberMe" class="w-4 h-4 accent-blue-600">
+Remember me
+</label>
+
+<a href="emailverification.html" class="text-blue-600 hover:underline">
+Forgot password?
+</a>
+
+</div>
+
+
+<button
+type="submit"
+class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg flex items-center justify-center gap-2 text-lg transition shadow-lg">
+
+<i class="fa-solid fa-right-to-bracket"></i> Login
+
+</button>
+
+</form>
+
+</div>
+
+<p class="mt-6 text-gray-700">
+Don’t have an account?
+<a href="signup.html" class="text-blue-600 font-semibold hover:underline">
+Create one
+</a>
+</p>
+
+</div>
+</section>
+
+
+<script>
+
+// 👁️ Toggle Password
+
+function togglePassword() {
+  const password = document.getElementById("password");
+  const icon = document.getElementById("eyeIcon");
+
+  if (password.type === "password") {
+    password.type = "text";
+    icon.classList.replace("fa-eye", "fa-eye-slash");
+  } else {
+    password.type = "password";
+    icon.classList.replace("fa-eye-slash", "fa-eye");
+  }
+}
+
+// 📩 Form Submit
+
+const form = document.getElementById("loginForm");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  // values
+  const email = form.email.value.trim();
+  const password = form.password.value;
+
+  let isValid = true;
+
+  // clear old errors
+  document.getElementById("emailError").innerHTML = "";
+  document.getElementById("passwordError").innerHTML = "";
+
+  // ✅ validation
+  if (!email.includes("@")) {
+    document.getElementById("emailError").innerHTML = "Enter valid email";
+    isValid = false;
+  }
+
+  if (password.length < 6) {
+    document.getElementById("passwordError").innerHTML = "Password must be at least 6 characters";
+    isValid = false;
+  }
+
+  // ✅ if valid → call API
+  if (isValid) {
+    loginUser();
+  }
+});
+
+// 🌐 API function
+
+async function loginUser() { 
+  const email = document.querySelector("input[name='email']").value; 
+  const password = document.getElementById("password").value; 
+  const rememberMe = document.getElementById("rememberMe").checked; 
+
+  try {
+
+    const res = await fetch("http://localhost:5000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+
+      // ✅ store token
+      if (rememberMe) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("rememberEmail", email);
+      } else {
+        sessionStorage.setItem("token", data.token);
+        localStorage.removeItem("rememberEmail");
+      }
+
+      alert("Login successful ✅");
+      window.location.href = "dashboard.html";
+
+    } else {
+      alert(data.message);
+    }
+
+  } catch (error) {
+    alert("Server error ❌");
+  }
+}
+</script>
+
+</body>
+</html>

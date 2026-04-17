@@ -1,0 +1,167 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Verification</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gray-100 flex items-center justify-center">
+
+<div class="bg-white w-full max-w-md rounded-xl shadow-xl p-10 text-center">
+
+<h1 class="text-3xl font-bold text-gray-800 mb-2">
+Email Verification
+</h1>
+
+<p class="text-gray-500 mb-8">
+We have sent a code to your email
+<span id="userEmail" class="font-semibold text-gray-700"></span>
+</p>
+
+<form onsubmit="event.preventDefault(); verifyOTP();">
+
+<!-- OTP Boxes -->
+<div class="flex justify-center gap-4 mb-8">
+<input maxlength="1" class="otp">
+<input maxlength="1" class="otp">
+<input maxlength="1" class="otp">
+<input maxlength="1" class="otp">
+</div>
+
+<button type="submit"
+class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-lg text-lg font-semibold shadow-md hover:opacity-90 transition">
+Verify Account
+</button>
+
+</form>
+
+<p class="text-gray-500 text-sm mt-6">
+Didn't recieve code?
+<a href="#" class="text-blue-600 font-medium hover:underline">
+Resend OTP
+</a>
+</p>
+
+</div>
+
+<script>
+
+// get email from localStorage
+const email = localStorage.getItem("resetEmail");
+
+// show email on UI
+document.getElementById("userEmail").innerText =
+  email || "your email";
+
+// OTP inputs
+const inputs = document.querySelectorAll(".otp");
+
+// auto focus first input safely
+if (inputs.length > 0) {
+  inputs[0].focus();
+}
+
+inputs.forEach((input, index) => {
+
+  input.classList.add(
+    "w-14","h-14","text-center",
+    "text-xl","border","rounded-lg",
+    "focus:outline-none","focus:ring-2",
+    "focus:ring-blue-500"
+  );
+
+  input.addEventListener("input", () => {
+
+    // allow only numbers
+    input.value = input.value.replace(/[^0-9]/g,"");
+
+    // move forward
+    if(input.value && index < inputs.length-1){
+      inputs[index+1].focus();
+    }
+
+  });
+
+  input.addEventListener("keydown",(e)=>{
+
+    // move back
+    if(e.key==="Backspace" && !input.value && index>0){
+      inputs[index-1].focus();
+    }
+
+  });
+
+});
+
+
+// verify OTP
+async function verifyOTP(){
+
+  let otp = "";
+
+  inputs.forEach(input=>{
+    otp += input.value;
+  });
+
+  if(otp.length !== 4){
+    alert("Please enter valid OTP");
+    return;
+  }
+
+  if(!email){
+    alert("Session expired. Please try again.");
+    window.location.href = "emailverification.html";
+    return;
+  }
+
+  try{
+
+    const res = await fetch("http://localhost:5000/api/verify-otp",{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body: JSON.stringify({
+        email: email,
+        otp: otp
+      })
+
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+
+      alert("OTP Verified Successfully ✅");
+
+      // clear stored email
+      localStorage.removeItem("resetEmail");
+
+      // redirect
+      window.location.href="reset-password.html";
+
+    }else{
+
+      alert(data.message || "Invalid OTP");
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+    alert("Server error");
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>

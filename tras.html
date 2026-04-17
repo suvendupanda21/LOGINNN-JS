@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+      <h1 class="heading">signup </h1>
+
+      <form  id="signupForm">
+        <div class="field">
+            <label class="lvl">full name</label>
+            <div class="">
+                <input type="text" id="fullName" name="fullName" placeholder="full Name">
+                <i class="fa-solid fa-address-book"></i>
+            </div>
+            <p class="fullNameError"></p>
+            
+        </div>
+
+        <div class="field">
+            <label class="lvl">email</label>
+            <div class="">
+                <input type="email" id="email" name="email" placeholder="email">
+                <i class="fa-solid fa-address-book"></i>
+            </div>
+            <p class="emailError"></p>
+            
+        </div>
+
+        <div class="field">
+            <label class="lvl">phone</label>
+            <div class="">
+                <input type="phone" id="phone" name="phone" placeholder="phone">
+                <i class="fa-solid fa-address-book"></i>
+            </div>
+            <p class="phoneError"></p>
+
+        </div>
+
+        <div class="field">
+            <label class="lvl">password</label>
+            <div class="">
+                <input type="password" id="password" name="password" placeholder="password">
+                <i class="fa-solid fa-address-book"></i>
+            </div>
+            <p class="passwordError"></p>
+            
+        </div>
+
+        <div class="field">
+            <label class="lvl">confirm password</label>
+            <div class="">
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="confirm password">
+                <i class="fa-solid fa-address-book"></i>
+            </div>
+            <p class="confirmPasswordError"></p>
+            
+        </div>
+
+
+        <div class="field">
+            <label class="lvl">address</label>
+            <div class="">
+                <textarea type="text" id="address" name="address" placeholder="address"></textarea> 
+                <i class="fa-solid fa-address-book"></i>
+            </div>
+            <p class="addressError"></p>
+            
+        </div>
+
+        <button type="submit">Sign Up</button>
+      </form>
+   <script>
+    // JavaScript code for form validation and submission can be added here
+        const form = document.getElementById("signup")
+        form.addEventListener ("submit" , function(e) {
+            e.preventDefault();
+        }
+    )
+   </script>
+</body>
+</html>

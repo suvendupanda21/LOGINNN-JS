@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forgot Password</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body class="min-h-screen bg-gray-100 flex items-center justify-center">
+
+<div class="bg-white w-full max-w-md rounded-xl shadow-xl p-10 text-center">
+
+<h1 class="text-3xl font-bold text-gray-800 mb-2">
+Forgot Password
+</h1>
+
+<p class="text-gray-500 mb-8">
+Enter your email and we will send you an OTP to reset your password
+</p>
+
+<form onsubmit="event.preventDefault(); sendOTP();">
+
+<!-- Email Field -->
+<div class="relative mb-6">
+
+<input id="email"
+type="email"
+required
+placeholder="Enter your email"
+class="w-full border border-gray-300 rounded-lg px-4 py-3 pl-10 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+<i class="fa-regular fa-envelope absolute left-3 top-3.5 text-gray-400"></i>
+
+</div>
+
+<!-- Send OTP Button -->
+<button type="submit"
+class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 rounded-lg text-lg font-semibold shadow-md hover:opacity-90 transition">
+
+Send OTP
+
+</button>
+
+</form>
+
+<p class="text-gray-500 text-sm mt-6">
+Remember your password?
+<a href="login.html" class="text-blue-600 font-semibold hover:underline">
+Login
+</a>
+</p>
+
+</div>
+
+<script>   
+
+async function sendOTP(){
+
+const email = document.getElementById("email").value.trim();
+
+// email validation
+if(!email){
+alert("Please enter your email");
+return;
+}
+
+try{
+
+const response = await fetch("http://localhost:5000/api/forgot-password",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({email})
+
+});
+
+const data = await response.json();
+
+console.log(data);
+
+// only redirect if success
+if(response.ok){
+
+alert(data.message || "OTP sent successfully ✅");
+
+// save email for otp verification
+localStorage.setItem("resetEmail",email);
+
+// redirect
+window.location.href="otp.html";
+
+}else{
+
+alert(data.message || "Email not found");
+
+}
+
+}catch(error){
+
+console.error(error);
+alert("Server error");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>

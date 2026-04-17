@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 via-white to-indigo-100">
+
+<main class="flex items-center justify-center px-6 pt-28 pb-16">
+  <div class="w-full max-w-2xl">
+
+    <h1 class="text-4xl font-bold text-center text-gray-900">
+      Create your account
+    </h1>
+
+    <p class="text-center text-gray-600 mt-2">
+      Already have an account?
+      <a href="login.html" class="text-blue-600 font-semibold hover:underline">
+        Sign in here
+      </a>
+    </p>
+
+    <div class="mt-10 bg-white rounded-2xl shadow-2xl border border-blue-100 p-10">
+
+      <form id="signupForm" class="space-y-6">
+
+        <!-- Full Name -->
+        <div>
+          <label class="font-semibold text-gray-700">Full Name</label>
+          <div class="mt-2 flex items-center gap-3 border rounded-lg px-4 py-3">
+            <i class="fa-solid fa-user text-blue-600"></i>
+            <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" class="w-full outline-none bg-transparent">
+          </div>
+          <p id="fullNameError" class="text-red-500 text-sm mt-1"></p>
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label class="font-semibold text-gray-700">Email</label>
+          <div class="mt-2 flex items-center gap-3 border rounded-lg px-4 py-3">
+            <i class="fa-solid fa-envelope text-blue-600"></i>
+            <input type="email" id="email" name="email" placeholder="Enter your email" class="w-full outline-none bg-transparent">
+          </div>
+          <p id="emailError" class="text-red-500 text-sm mt-1"></p>
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label class="font-semibold text-gray-700">Phone</label>
+          <div class="mt-2 flex items-center gap-3 border rounded-lg px-4 py-3">
+            <i class="fa-solid fa-phone text-blue-600"></i>
+            <input type="text" id="phone" name="phone"  placeholder="Enter 10-digit phone number" class="w-full outline-none bg-transparent">
+          </div>
+          <p id="phoneError" class="text-red-500 text-sm mt-1"></p>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="font-semibold text-gray-700">Password</label>
+          <div class="mt-2 flex items-center gap-3 border rounded-lg px-4 py-3">
+            <i class="fa-solid fa-lock text-blue-600"></i>
+            <input type="password" id="password" name="password"  placeholder="Enter password" class="w-full outline-none bg-transparent">
+          </div>
+          <p id="passwordError" class="text-red-500 text-sm mt-1"></p>
+        </div>
+
+        <!-- Confirm Password -->
+        <div>
+          <label class="font-semibold text-gray-700">Confirm Password</label>
+          <div class="mt-2 flex items-center gap-3 border rounded-lg px-4 py-3">
+            <i class="fa-solid fa-lock text-blue-600"></i>
+            <input type="password" id="confirmPassword" name="confirmPassword"  placeholder="Confirm password" class="w-full outline-none bg-transparent">
+          </div>
+          <p id="confirmPasswordError" class="text-red-500 text-sm mt-1"></p>
+        </div>
+
+        <!-- Address -->
+        <div>
+          <label class="font-semibold text-gray-700">Address</label>
+          <div class="mt-2 flex gap-3 border rounded-lg px-4 py-3">
+            <i class="fa-solid fa-location-dot text-blue-600 mt-1"></i>
+            <textarea id="address" name="address" rows="3" placeholder="Enter your address" class="w-full outline-none resize-none bg-transparent"></textarea>
+          </div>
+          <p id="addressError" class="text-red-500 text-sm mt-1"></p>
+        </div>
+
+        <button type="submit"
+          class="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg">
+          Create Account
+        </button>
+
+      </form>
+    </div>
+  </div>
+</main>
+<script>
+const form = document.getElementById("signupForm");
+
+form.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  let isValid = true;
+
+  // clear errors
+  document.getElementById("fullNameError").innerHTML = "";
+  document.getElementById("emailError").innerHTML = "";
+  document.getElementById("phoneError").innerHTML = "";
+  document.getElementById("passwordError").innerHTML = "";
+  document.getElementById("confirmPasswordError").innerHTML = "";
+  document.getElementById("addressError").innerHTML = "";
+
+  // get values
+  const fullName = document.querySelector("#fullName").value.trim();
+  const email = document.querySelector("#email").value.trim();
+  const phone = document.querySelector("#phone").value.trim();
+  const password = document.querySelector("#password").value;
+  const confirmPassword = document.querySelector("#confirmPassword").value;
+  const address = document.querySelector("#address").value.trim();
+
+  // validation
+  if (fullName === "") {
+    document.getElementById("fullNameError").innerHTML = "Full name is required";
+    isValid = false;
+  }
+
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    document.getElementById("emailError").innerHTML = "Enter valid email";
+    isValid = false;
+  }
+
+  if (!/^\d{10}$/.test(phone)) {
+    document.getElementById("phoneError").innerHTML = "Enter valid phone";
+    isValid = false;
+  }
+
+  if (password.length < 6) {
+    document.getElementById("passwordError").innerHTML = "Min 6 characters";
+    isValid = false;
+  }
+
+  if (password !== confirmPassword) {
+    document.getElementById("confirmPasswordError").innerHTML = "Passwords do not match";
+    isValid = false;
+  }
+
+  if (address === "") {
+    document.getElementById("addressError").innerHTML = "Address required";
+    isValid = false;
+  }
+
+  // ✅ SAME STYLE AS YOU WANT
+  if (isValid) {
+    signupUser();
+  }
+});
+
+
+// 🌐 API function 
+
+async function signupUser() {
+     const fullName = document.querySelector("#fullName").value.trim();
+     const email = document.querySelector("#email").value.trim();
+     const phone = document.querySelector("#phone").value.trim();
+     const password = document.querySelector("#password").value;
+     const confirmPassword = document.querySelector("#confirmPassword").value;
+     const address = document.querySelector("#address").value.trim();
+
+  try {
+    const res = await fetch("http://localhost:5000/api/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        fullName,
+        email,
+        phone,
+        password,
+        confirmPassword,
+        address
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Signup successful ✅");
+      document.getElementById("signupForm").reset();
+      window.location.href = "login.html";
+    } else {
+      alert(data.message || "Signup failed ❌");
+    }
+
+  } catch (error) {
+    alert("Server error ❌");
+  }
+}
+</script>
+
+</body>
+</html>
+
+
+
